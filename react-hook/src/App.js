@@ -1,41 +1,74 @@
-import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import 'primeflex/primeflex.css';
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 function App() {
-  return (
+  const [isLogin, setIsLogin] = useState(false);
+  const loginRef = useRef();
+  const headerRef = useRef();
+
+  useLayoutEffect(() => {
+    // componentDidMount / componentDidUpdate phase
+    console.log('componentDidMount / componentDidUpdate phase');
+
+    console.log(loginRef.current);
+    console.log(headerRef.current);
+
+  });
+
+  return (<>
+    <Header ref={headerRef}/>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-        <Login/>
-      </header>
+      <button type="button" onClick={()=>{ setIsLogin(e => !e)}}>toggle</button>
+      <div ref={loginRef}>
+        {isLogin ? <span>Welcome</span> : <Login />}
+      </div>
     </div>
-  );
+  </>);
 }
 
-function Login(){
-  
+function Login(ref) {
+  // this using state hook
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const loginFn = ev => {
-    const login = {username, password};
+    const login = { username, password };
     console.log('login', login);
   };
 
-  return(<>
-      <input type="text" name="username" onChange={event => setUsername(event.target.value)} value={username} placeholder="Username" />
-      <input type="password" name="password" onChange={event => setPassword(event.target.value)} value={password} placeholder="Password" />
-      <div>
-        <button type="submit" name="login" onClick={loginFn}>Login</button>
-      </div>
+  useEffect(() => {
+
+    //will run  mount of thos component
+    document.title = 'Login To App'
+    console.log('Login Compoent will Mount');
+    return () => { 
+      // will run unmount of this component 
+      document.title = 'Welcome User';
+      console.log('Login Compoent will unmount');
+
+     };
+  });
+
+  return (<>
+    <input type="text" name="username" onChange={event => setUsername(event.target.value)} value={username} placeholder="Username" />
+    <input type="password" name="password" onChange={event => setPassword(event.target.value)} value={password} placeholder="Password" />
+    <div>
+      <button type="submit" name="login" onClick={loginFn}>Login</button>
+    </div>
   </>);
 }
+
+
+function Header(props, ref) {
+  const headerRef = useRef();
+  return (<>
+  <div ref={headerRef} className="header p-shadow-8">
+    <nav>React HOOK</nav>
+  </div>
+  </>);
+}
+
+Header = forwardRef(Header);
 
 export default App;
