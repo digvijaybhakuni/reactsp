@@ -30,7 +30,7 @@ export const Blog = () => {
     }, [getAllUsers, getAllPosts]);
 
 
-    return (<div>
+    return (<div className="container">
         <div className="posts">
             {posts && users ? <PostList posts={posts} users={users} /> : <h3>Loading...</h3>}
         </div>
@@ -39,7 +39,7 @@ export const Blog = () => {
 };
 
 const PostList = (props) => {
-    const {posts, users } = props;
+    const { posts, users } = props;
     const getUser = id => {
         const user = users.find(u => u.id === id);
         return (<div>
@@ -47,13 +47,24 @@ const PostList = (props) => {
         </div>)
     };
     return (<div>
-        {posts.map(p => <div key={p.id}>
-            <h2>{p.title}</h2>
-            <div>
-                <p>{p.body}</p>
-            </div>
-            <div>{getUser(p.userId)}</div>
-        </div>)}
+        {posts.map(p => <PostCard key={p.id} post={p} author={getUser(p.userId)} />)}
     </div>)
 
 };
+
+
+const PostCard = ({post, author}) => {
+
+    return <>
+        <div class="card" style={{width: '60rem'}}>
+            <div class="card-body">
+                <h5 class="card-title">{post.title}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                <p class="card-text">{post.body}</p>
+                <a href={`/blog/post/${post.id}`} class="card-link">Open Post</a>
+                <a href="#" class="card-link">{author}</a>
+            </div>
+        </div>
+    </>;
+
+}

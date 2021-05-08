@@ -1,4 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.slim';
+import 'popper.js'
+import 'bootstrap/js/dist/dropdown';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

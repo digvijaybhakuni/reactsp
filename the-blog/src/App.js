@@ -3,8 +3,11 @@ import './App.css';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import { Suspense } from 'react';
 import { Blog } from './Blog';
+import { post } from 'jquery';
+import { Post } from './Post';
 
 function App() {
+  const sampleStr = "==="
   return (
     <div className="App">
       <BrowserRouter>
@@ -16,6 +19,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/blog" component={Blog} />
+              <Route exact path="/post/*" component={Post} />
               <Route path="/about" component={About} />
             </Switch>
           </Suspense>
@@ -25,6 +29,9 @@ function App() {
     </div>
   );
 }
+
+
+const noop = () => {};
 
 const Headers = () => {
   return <div className="container">
@@ -43,9 +50,9 @@ const Headers = () => {
             <Link className="nav-link" to="/about">About</Link>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-        </a>
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" 
+              href="#" role="button" data-toggle="dropdown" 
+              aria-haspopup="true" aria-expanded="false">Dropdown</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Action</a>
               <a class="dropdown-item" href="#">Another action</a>
