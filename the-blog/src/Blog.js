@@ -61,8 +61,8 @@ const PostCard = ({post, author}) => {
                 <h5 class="card-title">{post.title}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
                 <p class="card-text">{post.body}</p>
-                <a href={`/blog/post/${post.id}`} class="card-link">Open Post</a>
-                <a href="#" class="card-link">{author}</a>
+                <a href={`/post/${post.id}`} class="card-link">...Read More</a>
+                <a href={`/author/${post.userId}`} class="card-link">{author}</a>
             </div>
         </div>
     </>;
