@@ -1,41 +1,56 @@
 import './App.css';
 
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
-import React, { Suspense, useContext, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Blog } from './Blog';
 import { Post } from './Post';
 import { Author } from './Author';
 import { Login } from './Login';
 import { Loading } from './Loading';
-import { LoginContext } from './Context';
+import { LoginContext, VisitorIdContext } from './Context';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState();
+  const [visitorId, setVisitorId] = useState();
+
+  useEffect(() => {
+    const fpPromise = FingerprintJS.load();
+    (async () => {
+      const fp = await fpPromise;
+      const result = await fp.get();
+      const visitorId = result.visitorId;
+      setVisitorId(visitorId);
+      console.log('result', result);
+    })();
+  }, [setVisitorId]);
 
   return (
     <div className="App">
-      <BrowserRouter>
-        ̥<LoginContext.Provider value={{ isLogin, setIsLogin, username, setUsername }}>
-          <header>
-            <Headers />
-          </header>
-          <main role="main" className="flex-shrink-0">
-            <Suspense fallback={<Loading />}>
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/blog" component={Blog} />
-                <Route exact path="/post/:postId" component={Post} />
-                <Route exact path="/author/:authorId" component={Author} />
-                <Route path="/about" component={About} />
-              </Switch>
-            </Suspense>
-          </main>
-        </LoginContext.Provider>
-      </BrowserRouter>
-      <Footer />
+      <VisitorIdContext.Provider value={{ visitorId, setVisitorId }}>
+        <BrowserRouter>
+          ̥<LoginContext.Provider value={{ isLogin, setIsLogin, username, setUsername }}>
+            <header>
+              <Headers />
+            </header>
+            <main role="main" className="flex-shrink-0">
+              <Suspense fallback={<Loading />}>
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/blog" component={Blog} />
+                  <Route exact path="/post/:postId" component={Post} />
+                  <Route exact path="/author/:authorId" component={Author} />
+                  <Route path="/about" component={About} />
+                </Switch>
+              </Suspense>
+            </main>
+          </LoginContext.Provider>
+        </BrowserRouter>
+        <Footer />
+      </VisitorIdContext.Provider>
     </div>
   );
 }
@@ -61,17 +76,17 @@ const Headers = () => {
           </li>
           <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle" id="navbarDropdown"
-              href="#" role="button" data-toggle="dropdown"
+              href={noop} role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">Dropdown</a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="#">Action</a>
-              <a className="dropdown-item" href="#">Another action</a>
+              <a className="dropdown-item" href={noop}>Action</a>
+              <a className="dropdown-item" href={noop}>Another action</a>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item" href="#">Something else here</a>
+              <a className="dropdown-item" href={noop}>Something else here</a>
             </div>
           </li>
           <li className="nav-item">
-            <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Disabled</a>
+            <a className="nav-link disabled" href={noop} nooptabIndex="-1" aria-disabled="true">Disabled</a>
           </li>
         </ul>
         <form className="form-inline my-2 my-lg-0">
@@ -89,9 +104,11 @@ const Headers = () => {
 };
 
 const Footer = () => {
+  const { visitorId } = useContext(VisitorIdContext);
   return <footer className="footer mt-auto py-3">
     <div className="container">
       <span className="text-muted">Place sticky footer content here.</span>
+      <span>VisitorId: {visitorId}</span>
     </div>
   </footer>
 }
