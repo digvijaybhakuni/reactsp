@@ -9,11 +9,11 @@ import { Login } from './Login';
 import { Loading } from './Loading';
 import { LoginContext, VisitorIdContext } from './Context';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { LoginProvider } from './Provider';
 
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [username, setUsername] = useState();
+ 
   const [visitorId, setVisitorId] = useState();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ function App() {
     <div className="App">
       <VisitorIdContext.Provider value={{ visitorId, setVisitorId }}>
         <BrowserRouter>
-          ̥<LoginContext.Provider value={{ isLogin, setIsLogin, username, setUsername }}>
+          ̥<LoginProvider>
             <header>
               <Headers />
             </header>
@@ -47,7 +47,7 @@ function App() {
                 </Switch>
               </Suspense>
             </main>
-          </LoginContext.Provider>
+          </LoginProvider>
         </BrowserRouter>
         <Footer />
       </VisitorIdContext.Provider>
