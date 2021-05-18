@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Blog } from './Blog';
 import { Post } from './Post';
+import { About } from './About';
 import { Author } from './Author';
 import { Login } from './Login';
 import { Loading } from './Loading';
@@ -121,11 +122,6 @@ const Home = () => {
 }
 
 
-const About = () => {
-  return <div className="container about">
-    <h1>This About</h1>
-  </div>
-}
 
 const Jumbotron = () => {
   return <div className="jumbotron">
